@@ -1,0 +1,5 @@
+# reviewed_god_shas.txt - the G.O.D commits whose image evaluator YOU have read (copy this file to
+# reviewed_god_shas.txt and add one full 40-hex SHA per line, with a short note after a '#').
+# build_eval_image.sh refuses any GOD_SHA not listed here unless ALLOW_UNREVIEWED_GOD=1.
+#
+# <40-hex sha>   # <date you read it> <what you checked: diffusion.py, image_artifacts.py, scoring/tasks.py, ...>

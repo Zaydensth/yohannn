@@ -1,0 +1,10 @@
+# Obsidian per-mesin, bukan konten
+.obsidian/workspace*
+.obsidian/cache
+.trash/
+.DS_Store
+
+# python bytecode from the ops test suites
+__pycache__/
+*.pyc
+.private-remote-ok

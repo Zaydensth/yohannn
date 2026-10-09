@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote:*)",
+      "Bash(git rev-list:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git merge-base:*)",
+      "Bash(git cherry:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git blame:*)",
+      "Bash(git fetch:*)",
+      "Bash(rg:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(wc:*)",
+      "Bash(python3 -c:*)",
+      "Bash(python3 -m json.tool:*)",
+      "Bash(jq:*)",
+      "Bash(curl -sS https://raw.githubusercontent.com/gradients-ai/G.O.D/*)",
+      "Bash(curl -sS https://api.gradients.io/auditing/*)",
+      "Bash(curl -sS https://huggingface.co/api/models/*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.gradients.io)",
+      "WebFetch(domain:huggingface.co)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(git commit:*)",
+      "Bash(docker:*)",
+      "Bash(ssh:*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(**/*.pem)",
+      "Read(**/id_rsa*)",
+      "Bash(git push --force:*)",
+      "Bash(git push origin main:*)"
+    ]
+  },
+  "env": {
+    "GOD_UPSTREAM": "https://github.com/gradients-ai/G.O.D",
+    "GOD_RAW": "https://raw.githubusercontent.com/gradients-ai/G.O.D/main"
+  }
+}

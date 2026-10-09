@@ -1,0 +1,5 @@
+# lock UNBOUND - lock_cells.sh replaces this line at LOCK time (plan_sha256= fable= slug= rows_sha256= [pin_sha=])
+cell	enabled	tourn	task_id	trainer_image	hours	env	note
+# TEMPLATE rows (enabled=0). One change per A/B: same task, same data, same hours, same evaluator; only the arm differs.
+ctl-task1	0	tourn_<id>_<yyyymmdd>	<task uuid>	<your-trainer>:<sha8>	task		control: your current default, production-shaped (empty env)
+arm-task1	0	tourn_<id>_<yyyymmdd>	<task uuid>	<your-trainer>:<sha8>	task	MY_LEVER=1	arm: the one lever under test

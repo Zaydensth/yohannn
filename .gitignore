@@ -1,0 +1,13 @@
+# local working folder, never published
+_work/
+
+# python caches
+__pycache__/
+*.pyc
+
+# secrets and model weights never belong in this repository
+.env
+*.safetensors
+
+# macOS folder metadata
+.DS_Store

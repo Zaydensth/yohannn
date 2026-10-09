@@ -1,0 +1,4 @@
+# fixes.example.tsv - TEMPLATE for verify-fixes-present.py (copy to fixes.tsv in your dev tree, never into the
+# submission tree). One row per consequential fix, TAB-separated: name, path in the miner repo, a literal string that
+# exists ONLY when the fix is present (the line that makes it work, not just a function name).
+# <short fix name>	<path/in/repo.py>	<literal marker string>
