@@ -1,0 +1,22 @@
+#!/bin/bash
+# Per-process DNS workaround: the operator machine's resolver cannot resolve the provider's ssh proxy name
+# while DNS-over-HTTPS (addressed by IP) can. Prepend this directory to PATH for ONE chain/watcher process;
+# nothing system-wide is touched. Only a destination '*@<PROXY_HOST>' is rewritten: HostName=<DoH A record>,
+# HostKeyAlias=<PROXY_HOST> so the existing known_hosts entry still matches. Every other ssh call passes through.
+PROXY_HOST="${DOH_SSH_PROXY_HOST:-ssh.runpod.io}"       # edit or export for your provider
+DOH_URL="${DOH_URL:-https://1.1.1.1/dns-query}"           # an IP, so no bootstrap DNS is needed
+REAL=/usr/bin/ssh
+need=0; for a in "$@"; do [[ "$a" == *"@$PROXY_HOST" ]] && need=1; done
+if [ "$need" = 1 ]; then
+  cache="${DOH_SSH_PROXY_IP_CACHE:-$HOME/.cache/doh_ssh_proxy_ip}"
+  ip="$(curl -s -m 15 --doh-url "$DOH_URL" -H 'accept: application/dns-json' \
+        "$DOH_URL?name=$PROXY_HOST&type=A" 2>/dev/null \
+        | python3 -c 'import json,sys
+try:
+    d=json.load(sys.stdin); print(next(a["data"] for a in d.get("Answer",[]) if a.get("type")==1))
+except Exception: pass' 2>/dev/null)"
+  if [ -n "$ip" ]; then mkdir -p "$(dirname "$cache")"; printf '%s\n' "$ip" > "$cache"; else ip="$(cat "$cache" 2>/dev/null)"; fi
+  if [ -n "$ip" ]; then exec "$REAL" -o "HostName=$ip" -o "HostKeyAlias=$PROXY_HOST" "$@"; fi
+  echo "doh ssh wrapper: $PROXY_HOST unresolvable via DoH and no cache" >&2
+fi
+exec "$REAL" "$@"

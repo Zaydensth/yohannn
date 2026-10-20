@@ -50,8 +50,25 @@ dipercaya track lain.
 7. **Jangan klaim selesai tanpa angka.**
 8. **Jangan karang.** Label VERIFIED atau INFERRED pada setiap klaim.
 
+## 3b. Tiga kebiasaan yang membuat vault ini berguna
+
+1. **Vault harus ada dan privat sebelum sesi pertama.** Kalau `~/.claude/projects/<slug>/memory` belum
+   symlink ke vault ini, atau `git remote -v` kosong / repo-nya publik: berhenti, arahkan user membuat
+   repo GitHub **privat** (`gh repo create <you>/<vault> --private`), lalu `install.sh`. Itu pekerjaan
+   nomor satu — tanpa remote privat tidak ada yang bertahan.
+2. **Simpan saat faktanya muncul, lalu pastikan ter-push.** Hook `Stop`/`PostToolUse` menjalankan
+   `sync.sh`; kalau ragu, jalankan `bash sync.sh` dan cek `git log origin/main -1`. Gaya penulisan
+   (satu berkas satu fakta, frontmatter, baris indeks, VERIFIED/INFERRED, Why/How to apply, arsip
+   indeks): `STYLE.md`.
+3. **Serah-terima saat ganti akun Claude atau saat limit akun ≥ 96 %:** tulis
+   `projects/<track>/jobs/HANDOFF_<yyyymmdd>_<slug>.md` dari `templates/jobs/HANDOFF.md` (state nyata,
+   perintah lanjut, aturan, daftar memory terbaru, prompt copas `/lanjut-<track>-<yyyymmdd>`), indeks di §8,
+   push, amankan pod GPU, berhenti. Akun baru mulai dari: indeks → memory terbaru → handoff.
+
 ## 4. Checklist sesi pertama
 
+0. Kalau ada `jobs/HANDOFF_*.md` yang lebih baru dari sesi terakhirmu: baca itu dulu, lalu memory yang
+   berubah 48 jam terakhir (`git log --since='2 days ago' --name-only`).
 1. Baca `global/MEMORY.md` (kalau sudah ada), lalu `projects/<track>/MEMORY.md`.
 2. Baca `<repo>/CLAUDE.md` kalau ada; kalau belum ada, itu pekerjaan pertama.
 3. **Tegakkan ground truth sendiri** — baca `gradients-ai/G.O.D` branch `main` untuk track
@@ -65,9 +82,12 @@ dipercaya track lain.
 
 ## 5. Yang belum diketahui — tanya, jangan karang
 
-Hotkey/coldkey Bittensor, host/IP VPS, token push GitHub, host Grafana + datasource UID Loki
-(kalau ada akses), nama project W&B. Begitu didapat, simpan di `global/` §0 / §4 — untuk yang
-rahasia, simpan *di mana* nilainya disimpan (keychain, password manager), **bukan** nilainya.
+Hotkey/coldkey Bittensor, host/IP VPS, token push GitHub, **token write Hugging Face** (`~/.hf_env`,
+`HF_TOKEN=…` + `HF_USERNAME=…`, 0600 — minta user membuatnya saat pertama kali bila belum ada; verifikasi
+dengan `whoami` ter-autentikasi tanpa mencetak), kunci API penyedia GPU (berkas 0600), host Grafana +
+datasource UID Loki (kalau ada akses), nama project W&B. Begitu didapat, simpan di `global/` §0 / §4 —
+untuk yang rahasia, simpan *di mana* nilainya disimpan (keychain, password manager, path berkas),
+**bukan** nilainya.
 
 ## 6. Skill domain per track
 

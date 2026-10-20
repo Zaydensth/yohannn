@@ -19,10 +19,35 @@ hyper-parameters reachable inside a fixed wall clock on unknown hardware**.
    is sub-linear — naive linear scaling overshoots.
 4. **Task type.** Preference and RL objectives are far more fragile than supervised fine-tuning and
    generally want lower rates and tighter safety bounds.
+5. **The weights themselves.** Statistics of the actual weight tensors (e.g. a typical magnitude across
+   the main projection groups) carry real signal about the scale the model is comfortable with, and — 
+   unlike names or metadata — survive anonymisation of the model.
+
+**How to build a policy, in order of increasing sophistication:**
+- *Level 0*: one constant per task type. Terrible on unusual shapes, but never catastrophic.
+- *Level 1*: a formula from size and task type. Predictable; fails predictably; a fine baseline.
+- *Level 2*: formula seeded from **measured weight statistics** — more robust to anonymised or unusual
+  models than any name-based lookup.
+- *Level 3*: **measure the loss response** early in the run (a handful of steps at the candidate rate) and
+  correct the estimate from the observed curvature.
+- *Level 4*: a real in-run search over a small band, scored on the actual objective, with weights restored
+  between trials.
+
+Levels 3–4 buy the most on unfamiliar models, and cost the most in complexity and multi-GPU risk. Do not
+build level 4 until levels 0–2 are solid and level 3 has proven itself.
 
 **Bounds matter more than the point estimate.** A clamp that rejects absurd values converts a
 catastrophic run into a mediocre one. Set an upper bound from the fragility of the task type and a lower
 bound from "does this train at all".
+
+**Be wary of stacking correctors.** Multiplying together several independently calibrated adjustments
+compounds their errors in ways nobody audited. One coherent formula plus one measurement generally beats
+four heuristics multiplied together.
+
+**A specific trap:** a "curvature" correction derived from the initial loss can invert its own sign when
+the seed model has been perturbed (some validators augment weights), because a damaged model reports a
+high initial loss that looks like a sharp landscape. Prefer measuring the *response to training* over
+inferring from a single initial value.
 
 ---
 

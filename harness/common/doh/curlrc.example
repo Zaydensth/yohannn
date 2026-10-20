@@ -1,0 +1,3 @@
+# Copy this file to <dir>/.curlrc and run the chain/watchers with CURL_HOME=<dir>.
+# Address the DoH server by IP so the workaround does not itself depend on the broken resolver.
+doh-url = "https://1.1.1.1/dns-query"
